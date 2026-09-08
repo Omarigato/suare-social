@@ -49,7 +49,7 @@ npm run post:tt        # Только TikTok
 У вас на компьютере уже работает `n8n`! Для мгновенной отправки любого поста в воркфлоу n8n:
 1. Откройте интерфейс n8n (`http://localhost:5678`).
 2. Нажмите **Import from File** и выберите файл:
-   `toyga-social/n8n/suare-socials-workflow.json`.
+   `suare-social/n8n/suare-socials-workflow.json`.
 3. Активируйте воркфлоу.
 4. Выполните команду в терминале:
    ```bash
@@ -176,7 +176,7 @@ cp .env.example .env
 ## 6. ЗАПИСЬ ВИДЕО ДЛЯ REELS, TIKTOK И SHORTS
 
 Для съемки видеороликов откройте в браузере файл:
-`toyga-social/docs/animacii-dlya-reels.html`
+`suare-social/docs/animacii-dlya-reels.html`
 
 - Нажимайте на интерактивные кнопки (открытие конверта, клик RSVP с салютом, отправка в WhatsApp).
 - Захватывайте экран в 9:16 (1080×1920) через OBS или встроенную запись экрана.

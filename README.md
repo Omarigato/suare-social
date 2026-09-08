@@ -41,6 +41,6 @@ npm run generate:tt    # TikTok
 
 ## 📖 Документация и руководства
 
-- [COMPLETE_ARCHITECTURE_AND_GENERATION_GUIDE.md](file:///c:/Users/Akim.O/Documents/Личные/проект/toyga%20new/suare-social/COMPLETE_ARCHITECTURE_AND_GENERATION_GUIDE.md) — Полное техническое описание движка генерации и архитектуры рендеринга.
-- [HOW_TO_POST.md](file:///c:/Users/Akim.O/Documents/Личные/проект/toyga%20new/suare-social/HOW_TO_POST.md) — Пошаговое руководство по настройке API ключей и публикации в каждую соцсеть.
+- [COMPLETE_ARCHITECTURE_AND_GENERATION_GUIDE.md](file:///c:/Users/Akim.O/Documents/Личные/проект/suare%20new/suare-social/COMPLETE_ARCHITECTURE_AND_GENERATION_GUIDE.md) — Полное техническое описание движка генерации и архитектуры рендеринга.
+- [HOW_TO_POST.md](file:///c:/Users/Akim.O/Documents/Личные/проект/suare%20new/suare-social/HOW_TO_POST.md) — Пошаговое руководство по настройке API ключей и публикации в каждую соцсеть.
 - `n8n/suare-socials-workflow.json` — Готовый воркфлоу для автоматического постинга через n8n.
