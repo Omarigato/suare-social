@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SUARE — Интерактивные анимации для Reels & TikTok</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@500;700&family=Manrope:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0F0F0E;
+      --panel: #171716;
+      --edge: #2A2A28;
+      --fg: #F4F4F2;
+      --fg-soft: #9A9995;
+      --gold: #E5C07B;
+      --gold-dim: rgba(229, 192, 123, 0.2);
+      --emerald: #2F7A46;
+      --stage-a: #161615;
+      --stage-b: #0A0A09;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Manrope', sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 100px;
+    }
+
+    header.top {
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--edge);
+    }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 4vw, 44px);
+      margin: 8px 0 12px;
+      color: var(--fg);
+    }
+
+    .lede {
+      max-width: 720px;
+      color: var(--fg-soft);
+      font-size: 17px;
+      margin: 0 0 24px;
+    }
+
+    .howto {
+      background: var(--panel);
+      border: 1px solid var(--edge);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 20px;
+    }
+
+    .howto h3 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+    }
+
+    .howto ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--fg-soft);
+      font-size: 15px;
+    }
+
+    .howto li { margin-bottom: 6px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .cell {
+      background: var(--panel);
+      border: 1px solid var(--edge);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cell h2 {
+      font-size: 18px;
+      margin: 0 0 4px;
+      color: var(--fg);
+    }
+
+    .cell .note {
+      font-size: 13px;
+      color: var(--fg-soft);
+      margin: 0 0 16px;
+    }
+
+    /* 9:16 Vertical Video Stage */
+    .stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      border-radius: 14px;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--stage-a) 0%, var(--stage-b) 100%);
+      border: 1px solid var(--edge);
+      container-type: inline-size;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button.btn-ctrl {
+      background: #222220;
+      border: 1px solid var(--edge);
+      color: var(--fg);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button.btn-ctrl:hover {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+    }
+
+    /* ==========================================================================
+       SCENE 1: ENVELOPE OPENING
+       ========================================================================== */
+    .env-box {
+      width: 82cqw;
+      height: 120cqw;
+      position: relative;
+      perspective: 800px;
+    }
+
+    .env-body {
+      position: absolute;
+      bottom: 10cqw;
+      left: 0;
+      width: 100%;
+      height: 70cqw;
+      background: #1C1B19;
+      border: 1px solid rgba(229,192,123,0.3);
+      border-radius: 16px;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.7);
+      z-index: 2;
+    }
+
+    .env-flap {
+      position: absolute;
+      top: 40cqw;
+      left: 0;
+      width: 100%;
+      height: 38cqw;
+      background: #252422;
+      border: 1px solid rgba(229,192,123,0.3);
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+      transform-origin: top;
+      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 4;
+    }
+
+    .env-card {
+      position: absolute;
+      left: 4cqw;
+      right: 4cqw;
+      bottom: 12cqw;
+      height: 80cqw;
+      background: #121211;
+      border: 1px solid var(--gold);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1;
+      box-shadow: 0 0 30px rgba(229,192,123,0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .env-box.open .env-flap {
+      transform: rotateX(180deg);
+      z-index: 0;
+    }
+
+    .env-box.open .env-card {
+      transform: translateY(-38cqw);
+      z-index: 3;
+    }
+
+    /* ==========================================================================
+       SCENE 2: RSVP TAP & COUNTER
+       ========================================================================== */
+    .rsvp-stage-card {
+      width: 82cqw;
+      background: #171716;
+      border: 1px solid rgba(229,192,123,0.4);
+      border-radius: 20px;
+      padding: 24px 18px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+
+    .counter-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13cqw;
+      color: var(--gold);
+      margin: 16px 0;
+      font-weight: 700;
+    }
+
+    .rsvp-trigger-btn {
+      width: 100%;
+      background: var(--gold);
+      color: #0F0F0E;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: 4.6cqw;
+      padding: 14px 20px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 6px 20px rgba(229,192,123,0.4);
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .rsvp-trigger-btn:active {
+      transform: scale(0.96);
+    }
+
+    .rsvp-trigger-btn.confirmed {
+      background: var(--emerald);
+      color: #FFF;
+      box-shadow: 0 6px 20px rgba(47,122,70,0.5);
+    }
+
+    /* ==========================================================================
+       SCENE 3: WHATSAPP CHAT INCOMING INVITE
+       ========================================================================== */
+    .chat-bubble {
+      width: 82cqw;
+      background: #1F2C34;
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .chat-bubble.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .chat-preview-card {
+      background: #111B21;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(229,192,123,0.3);
+      margin-bottom: 8px;
+    }
+
+    .chat-preview-header {
+      background: #171716;
+      padding: 16px;
+      text-align: center;
+      border-bottom: 1px solid #222D34;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="eyebrow">SUARE · VIDEO ENGINE & MOTION LAB</div>
+      <h1>Интерактивные анимации для Reels & TikTok</h1>
+      <p class="lede">
+        Живые CSS/HTML сцены (9:16) для записи экрана смартфонов, монтажа коротких видеороликов и демонстрации работы сервиса онлайн-шақыру SUARE.
+      </p>
+
+      <div class="howto">
+        <h3>КАК ЗАПИСЫВАТЬ РОЛИКИ:</h3>
+        <ol>
+          <li>Откройте эту страницу на полный экран или настройте окно захвата в OBS / QuickTime / Clipchamp (разрешение 1080×1920).</li>
+          <li>Нажмите кнопку «Запустить анимацию» под нужной сценой.</li>
+          <li>Запишите 5–10 секунд плавного видеоряда под фоновую музыку и наложите озвучку.</li>
+        </ol>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- CELL 1: ENVELOPE -->
+      <div class="cell">
+        <h2>Сцена 1: Открытие золотого конверта</h2>
+        <div class="note">Распаковка шақыру с плавным выездом карточки свадьбы</div>
+        <div class="stage" id="stage1">
+          <div class="env-box" id="envBox">
+            <div class="env-card">
+              <div style="font-family:'JetBrains Mono'; font-size:3cqw; color:var(--gold); letter-spacing:0.2em;">ҮЙЛЕНУ ТОЙ</div>
+              <div style="font-family:'Playfair Display'; font-size:6.5cqw; font-weight:700; margin:4cqw 0 2cqw;">Тойға шақыру</div>
+              <div style="font-family:'Playfair Display'; font-size:7.5cqw; font-style:italic; color:var(--gold);">Алихан & Аружан</div>
+              <div style="font-family:'Manrope'; font-size:3.5cqw; color:var(--fg-soft); margin-top:3cqw;">18 Шілде 2026 · Almaty</div>
+            </div>
+            <div class="env-body"></div>
+            <div class="env-flap"></div>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="btn-ctrl" onclick="toggleEnv()">Открыть / Закрыть</button>
+        </div>
+      </div>
+
+      <!-- CELL 2: RSVP TAP -->
+      <div class="cell">
+        <h2>Сцена 2: 1-Клик RSVP и счетчик гостей</h2>
+        <div class="note">Интерактивный клик подтверждения с обновлением списка</div>
+        <div class="stage" id="stage2">
+          <div class="rsvp-stage-card">
+            <div style="font-family:'JetBrains Mono'; font-size:3.2cqw; color:var(--gold);">ОНЛАЙН-RSVP</div>
+            <div style="font-family:'Playfair Display'; font-size:6.8cqw; font-weight:700; margin:3cqw 0 1cqw;">Расталған қонақтар</div>
+            <div class="counter-badge">
+              <span id="guestCount">142</span>
+              <span style="font-size:5cqw; color:var(--fg-soft);">/ 160</span>
+            </div>
+            <p style="font-size:3.6cqw; color:var(--fg-soft); margin-bottom:5cqw;">
+              Серік пен Айдана жауабын күтуде...
+            </p>
+            <button class="rsvp-trigger-btn" id="rsvpBtn" onclick="triggerRsvp()">
+              <span>✓ Иә, келемін (Растау)</span>
+            </button>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="btn-ctrl" onclick="triggerRsvp()">Нажать RSVP</button>
+          <button class="btn-ctrl" onclick="resetRsvp()">Сброс</button>
+        </div>
+      </div>
+
+      <!-- CELL 3: WHATSAPP CHAT -->
+      <div class="cell">
+        <h2>Сцена 3: Входящее приглашение в WhatsApp</h2>
+        <div class="note">Эффект получения персонализированной ссылки родственником</div>
+        <div class="stage" id="stage3">
+          <div class="chat-bubble" id="chatBubble">
+            <div class="chat-preview-card">
+              <div class="chat-preview-header">
+                <div style="font-family:'JetBrains Mono'; font-size:3cqw; color:var(--gold);">SUARE.APP</div>
+                <div style="font-family:'Playfair Display'; font-size:5.5cqw; color:#FFF; font-weight:700; margin-top:4px;">
+                  Алихан & Аружан Үйлену тойы
+                </div>
+              </div>
+            </div>
+            <div style="font-size:3.8cqw; color:#E9EDEF; line-height:1.4;">
+              Ассалаумағалейкум, Асқар аға! Сіздерді балаларымыздың үйлену тойына шақырамыз 👰🤵
+            </div>
+            <div style="font-size:3.4cqw; color:#53BDEB; margin-top:6px; word-break:break-all;">
+              https://suare.app/i/alikhan-aruzhan
+            </div>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="btn-ctrl" onclick="triggerChat()">Отправить сообщение</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Envelope toggle
+    function toggleEnv() {
+      const box = document.getElementById('envBox');
+      box.classList.toggle('open');
+    }
+
+    // RSVP toggle
+    let count = 142;
+    function triggerRsvp() {
+      const btn = document.getElementById('rsvpBtn');
+      const counter = document.getElementById('guestCount');
+      if (!btn.classList.contains('confirmed')) {
+        btn.classList.add('confirmed');
+        btn.innerHTML = '<span>✓ Жауабыңыз қабылданды!</span>';
+        count++;
+        counter.textContent = count;
+      }
+    }
+
+    function resetRsvp() {
+      const btn = document.getElementById('rsvpBtn');
+      const counter = document.getElementById('guestCount');
+      btn.classList.remove('confirmed');
+      btn.innerHTML = '<span>✓ Иә, келемін (Растау)</span>';
+      count = 142;
+      counter.textContent = count;
+    }
+
+    // Chat bubble
+    function triggerChat() {
+      const bubble = document.getElementById('chatBubble');
+      bubble.classList.remove('show');
+      setTimeout(() => bubble.classList.add('show'), 150);
+    }
+    setTimeout(() => triggerChat(), 500);
+  </script>
+</body>
+</html>

@@ -1,0 +1,508 @@
+/* SUARE Social Media Design System — Code-Driven Visual DNA.
+   Tailored for premium digital event & wedding invitations. */
+
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Rubik:wght@900&family=Unbounded:wght@600;700;800;900&display=swap");
+
+:root {
+  --background: 60 2% 6%;         /* Deep Luxury Onyx #0F0F0E */
+  --foreground: 60 4% 95%;        /* Crisp Contrast Off-White #F4F4F2 */
+  --card: 60 2% 9%;              /* Warm Dark Surface #171716 */
+  --card-foreground: 60 4% 95%;
+  --primary: 43 85% 62%;          /* Champagne Gold #E5C07B */
+  --primary-foreground: 60 2% 6%;
+  --emerald: 150 40% 45%;         /* Rich Emerald #2F7A46 */
+  --muted-foreground: 60 1% 60%;  /* #9A9995 */
+  --border: 60 2% 16%;           /* #2A2A28 */
+  --border-gold: 43 60% 40%;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: "Manrope", sans-serif;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   CANVAS VIEWPORTS
+   ========================================================================== */
+.canvas {
+  position: relative;
+  width: 1080px;
+  height: 1350px; /* 4:5 Instagram & Threads Post */
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 15% 15%, hsl(var(--primary) / 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, hsl(var(--emerald) / 0.12) 0%, transparent 50%),
+    hsl(var(--background));
+}
+
+.canvas.tall {
+  height: 1920px; /* 9:16 Stories & TikTok Covers */
+  background:
+    radial-gradient(circle at 20% 12%, hsl(var(--primary) / 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 80% 88%, hsl(var(--emerald) / 0.15) 0%, transparent 50%),
+    hsl(var(--background));
+}
+
+.canvas.wide {
+  width: 1920px;
+  height: 1080px; /* 16:9 YouTube Thumbnails */
+  background:
+    radial-gradient(circle at 75% 25%, hsl(var(--primary) / 0.16) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, hsl(var(--emerald) / 0.12) 0%, transparent 45%),
+    hsl(var(--background));
+}
+
+/* ==========================================================================
+   ATMOSPHERE: NOISE & SCANLINES
+   ========================================================================== */
+.grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  z-index: 2;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.scan-line {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: repeating-linear-gradient(
+    0deg, transparent 0px, transparent 3px,
+    hsl(0 0% 0% / 0.10) 3px, hsl(0 0% 0% / 0.10) 4px
+  );
+}
+
+/* Luxury border highlight */
+.canvas::after {
+  content: "";
+  position: absolute;
+  inset: 20px;
+  border: 1px solid hsl(var(--border) / 0.5);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ==========================================================================
+   TYPOGRAPHY
+   ========================================================================== */
+.font-serif { font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif; }
+.font-display { font-family: "Unbounded", "Manrope", sans-serif; }
+.font-mono { font-family: "JetBrains Mono", monospace; }
+
+/* Cyrillic text-stroke fix using Rubik 900 */
+.text-stroke {
+  font-family: "Rubik", "Unbounded", sans-serif;
+  font-weight: 900;
+  -webkit-text-stroke: 2.5px hsl(var(--foreground) / 0.45);
+  color: transparent;
+}
+
+.text-gold {
+  color: hsl(var(--primary));
+}
+
+.text-emerald {
+  color: hsl(var(--emerald));
+}
+
+/* ==========================================================================
+   SURFACES & COMPONENTS
+   ========================================================================== */
+.notch {
+  border-radius: 12px;
+  position: relative;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+}
+
+.notch-gold {
+  border-radius: 12px;
+  position: relative;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border-gold) / 0.8);
+  box-shadow: 0 0 25px hsl(var(--primary) / 0.08);
+}
+
+.section-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: hsl(var(--primary));
+  margin-bottom: 28px;
+  padding: 8px 18px;
+  border-radius: 100px;
+  background: hsl(var(--primary) / 0.10);
+  border: 1px solid hsl(var(--primary) / 0.25);
+  width: fit-content;
+}
+
+.section-marker::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: hsl(var(--primary));
+  box-shadow: 0 0 8px hsl(var(--primary));
+}
+
+/* Header & Logo */
+.header-bar {
+  position: absolute;
+  top: 60px;
+  left: 70px;
+  right: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 4;
+}
+
+.logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-wrap img, .logo-wrap svg {
+  height: 48px;
+  width: auto;
+}
+
+.slide-index {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 22px;
+  letter-spacing: 0.1em;
+  color: hsl(var(--muted-foreground));
+  background: hsl(var(--card) / 0.8);
+  padding: 8px 18px;
+  border-radius: 100px;
+  border: 1px solid hsl(var(--border));
+}
+.slide-index b {
+  color: hsl(var(--primary));
+}
+
+/* Footer Bar */
+.footer-bar {
+  position: absolute;
+  left: 70px;
+  right: 70px;
+  bottom: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 24px;
+  border-top: 1px solid hsl(var(--border) / 0.8);
+  z-index: 4;
+}
+
+.footer-bar .handle {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 20px;
+  color: hsl(var(--muted-foreground));
+}
+
+.footer-bar .handle b {
+  color: hsl(var(--foreground));
+  font-weight: 600;
+}
+
+.footer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 19px;
+  color: hsl(var(--primary));
+  background: hsl(var(--primary) / 0.08);
+  border: 1px solid hsl(var(--primary) / 0.25);
+  padding: 8px 18px;
+  border-radius: 100px;
+}
+
+/* Main Slide Body */
+.slide-body {
+  position: absolute;
+  top: 170px;
+  bottom: 140px;
+  left: 70px;
+  right: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 3;
+}
+
+.slide-headline {
+  margin: 0 0 24px;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+.slide-desc {
+  font-size: 28px;
+  line-height: 1.45;
+  color: hsl(var(--muted-foreground));
+  margin: 0;
+  max-width: 900px;
+}
+
+.slide-chips {
+  display: flex;
+  gap: 14px;
+  margin-top: 36px;
+  flex-wrap: wrap;
+}
+
+.slide-chip {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  padding: 12px 22px;
+  border-radius: 8px;
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card) / 0.9);
+}
+
+.slide-chip.gold {
+  color: hsl(var(--primary));
+  border-color: hsl(var(--primary) / 0.4);
+  background: hsl(var(--primary) / 0.08);
+}
+
+/* Background Photo / Textures */
+.bg-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.bg-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(85%) contrast(1.2) brightness(0.35);
+}
+
+.photo-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, hsl(var(--background) / 0.92) 0%, hsl(var(--background) / 0.6) 35%, hsl(var(--background) / 0.8) 70%, hsl(var(--background) / 0.98) 100%),
+    radial-gradient(circle at 20% 20%, hsl(var(--primary) / 0.16) 0%, transparent 50%);
+}
+
+/* ==========================================================================
+   SMARTPHONE MOCKUP (Suare Live Event Invite)
+   ========================================================================== */
+.mockup-wrap {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+.phone-frame {
+  width: 420px;
+  height: 820px;
+  background: #000;
+  border-radius: 46px;
+  padding: 12px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 0 2px rgba(229,192,123,0.3);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: hsl(var(--background));
+  border-radius: 36px;
+  overflow: hidden;
+  position: relative;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid hsl(var(--border));
+}
+
+.phone-notch {
+  width: 120px;
+  height: 24px;
+  background: #000;
+  border-radius: 0 0 16px 16px;
+  margin: -24px auto 20px;
+}
+
+.invite-card-preview {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border-gold) / 0.5);
+  border-radius: 20px;
+  padding: 24px 18px;
+  text-align: center;
+}
+
+.invite-card-preview .tag {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: hsl(var(--primary));
+}
+
+.invite-card-preview h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 26px;
+  margin: 12px 0 6px;
+  color: #F4F4F2;
+}
+
+.invite-card-preview .names {
+  font-family: "Playfair Display", serif;
+  font-size: 32px;
+  color: hsl(var(--primary));
+  margin: 14px 0;
+  font-style: italic;
+}
+
+.rsvp-btn {
+  background: hsl(var(--primary));
+  color: #0F0F0E;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 12px 24px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+  box-shadow: 0 4px 18px hsl(var(--primary) / 0.35);
+}
+
+/* ==========================================================================
+   YOUTUBE 16:9 THUMBNAIL STYLES
+   ========================================================================== */
+.yt-body {
+  position: absolute;
+  left: 90px;
+  top: 0;
+  bottom: 0;
+  width: 1180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 3;
+}
+
+.yt-body .section-marker {
+  font-size: 24px;
+  margin-bottom: 28px;
+}
+
+.yt-body h1 {
+  margin: 0;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.yt-sub {
+  font-size: 32px;
+  line-height: 1.45;
+  color: hsl(var(--muted-foreground));
+  margin: 28px 0 0;
+  max-width: 1000px;
+}
+
+.yt-chips {
+  display: flex;
+  gap: 16px;
+  margin-top: 36px;
+}
+
+.yt-chip {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 22px;
+  letter-spacing: 0.1em;
+  padding: 12px 24px;
+  border-radius: 8px;
+  color: hsl(var(--primary));
+  background: hsl(var(--card) / 0.9);
+  border: 1px solid hsl(var(--border));
+}
+
+.yt-ghost-num {
+  position: absolute;
+  right: 50px;
+  bottom: -160px;
+  z-index: 2;
+  font-family: "Rubik", sans-serif;
+  font-weight: 900;
+  font-size: 640px;
+  line-height: 1;
+  -webkit-text-stroke: 3px hsl(var(--primary) / 0.25);
+  color: transparent;
+  pointer-events: none;
+  user-select: none;
+}
+
+.yt-icon {
+  position: absolute;
+  right: 170px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 250px;
+  height: 250px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(var(--primary));
+  border: 1px solid hsl(var(--border-gold) / 0.5);
+  background: hsl(var(--card) / 0.9);
+  border-radius: 24px;
+  box-shadow: 0 0 50px hsl(var(--primary) / 0.1);
+}
+
+.yt-foot {
+  position: absolute;
+  left: 90px;
+  bottom: 60px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 24px;
+  letter-spacing: 0.08em;
+  color: hsl(var(--muted-foreground));
+}
+.yt-foot b { color: hsl(var(--foreground)); font-weight: 600; }
+.yt-foot .sep { color: hsl(var(--primary)); }
+
+.canvas.wide .photo-overlay {
+  background:
+    linear-gradient(90deg,
+      hsl(var(--background) / 0.98) 0%,
+      hsl(var(--background) / 0.94) 50%,
+      hsl(var(--background) / 0.65) 80%,
+      hsl(var(--background) / 0.85) 100%),
+    radial-gradient(circle at 80% 25%, hsl(var(--primary) / 0.18) 0%, transparent 50%);
+}

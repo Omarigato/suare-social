@@ -1,0 +1,36 @@
+{
+  "name": "suare-social",
+  "version": "1.0.0",
+  "description": "Code-driven content generator and multi-platform publishing pipeline for SUARE (Instagram, Threads, TikTok, YouTube)",
+  "main": "scripts/generate.js",
+  "scripts": {
+    "generate": "node scripts/generate.js && node scripts/generate-youtube.js && node scripts/generate-tiktok.js",
+    "generate:ig": "node scripts/generate.js",
+    "generate:yt": "node scripts/generate-youtube.js",
+    "generate:tt": "node scripts/generate-tiktok.js",
+    "capture": "node scripts/capture.js",
+    "capture:ig": "node scripts/capture.js \"\" instagram",
+    "capture:yt": "node scripts/capture.js \"\" youtube",
+    "capture:tt": "node scripts/capture.js \"\" tiktok",
+    "build": "npm run generate && npm run capture",
+    "post:dry-run": "node scripts/publish/dispatch.js --dry-run --platform=all",
+    "post:ig": "node scripts/publish/dispatch.js --platform=instagram",
+    "post:threads": "node scripts/publish/dispatch.js --platform=threads",
+    "post:yt": "node scripts/publish/dispatch.js --platform=youtube",
+    "post:tt": "node scripts/publish/dispatch.js --platform=tiktok",
+    "post:all": "node scripts/publish/dispatch.js --platform=all",
+    "n8n:push": "node scripts/publish/push-to-n8n.js"
+  },
+  "keywords": [
+    "suare",
+    "invitations",
+    "social-media-automation",
+    "instagram",
+    "threads",
+    "tiktok",
+    "youtube",
+    "n8n"
+  ],
+  "author": "SUARE",
+  "license": "ISC"
+}

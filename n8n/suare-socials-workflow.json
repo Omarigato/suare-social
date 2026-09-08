@@ -1,0 +1,169 @@
+{
+  "name": "SUARE · Multi-Platform Social Publisher (IG, Threads, TikTok, YouTube)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "suare-social-post",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-suare",
+      "name": "⚡ Webhook: Suare Post",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [400, 460]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extract incoming Suare bundle\nconst data = $input.item.json;\n\nreturn {\n  post_id: data.post_id || '01-announcement',\n  title: data.content?.title_kz || 'Suare Онлайн-шақыру',\n  caption: data.content?.caption_kz || 'Онлайн-шақыру жасау suare.app',\n  hashtags: data.content?.hashtags || '#suare #той',\n  files: data.files || {},\n  timestamp: new Date().toISOString()\n};"
+      },
+      "id": "code-format",
+      "name": "🛠️ Форматирование постов",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [620, 460]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.instagram.com/v19.0/me/media",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.INSTAGRAM_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n  \"image_url\": \"https://suare.app/static/media/instagram/post/{{ $json.post_id }}.png\",\n  \"caption\": \"{{ $json.caption }}\\n\\n{{ $json.hashtags }}\"\n}"
+      },
+      "id": "http-ig",
+      "name": "📸 Post to Instagram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 260]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.threads.net/v1.0/me/threads",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.THREADS_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n  \"media_type\": \"IMAGE\",\n  \"image_url\": \"https://suare.app/static/media/threads/post/{{ $json.post_id }}.png\",\n  \"text\": \"{{ $json.caption }}\"\n}"
+      },
+      "id": "http-threads",
+      "name": "🧵 Post to Threads",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.tiktokapis.com/v2/post/publish/content/init/",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.TIKTOK_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n  \"post_info\": {\n    \"title\": \"{{ $json.title }}\"\n  },\n  \"source_info\": {\n    \"source\": \"PULL_FROM_URL\",\n    \"photo_images\": [\"https://suare.app/static/media/tiktok/cover/01-launch-cover.png\"]\n  },\n  \"post_mode\": \"DIRECT_POST\",\n  \"media_type\": \"PHOTO\"\n}"
+      },
+      "id": "http-tiktok",
+      "name": "🎵 Post to TikTok",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 540]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/youtube/v3/videos",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.YOUTUBE_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n  \"snippet\": {\n    \"title\": \"{{ $json.title }}\",\n    \"description\": \"{{ $json.caption }}\",\n    \"tags\": [\"suare\", \"тойғашақыру\", \"онлайн\"]\n  },\n  \"status\": {\n    \"privacyStatus\": \"PUBLIC\"\n  }\n}"
+      },
+      "id": "http-youtube",
+      "name": "▶️ Post to YouTube",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 680]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot{{ $env.TELEGRAM_BOT_TOKEN }}/sendMessage",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={\n  \"chat_id\": \"{{ $env.TELEGRAM_CHAT_ID }}\",\n  \"text\": \"✅ SUARE: Пост '{{ $json.post_id }}' успешно отправлен во все социальные сети (Instagram, Threads, TikTok, YouTube)!\"\n}"
+      },
+      "id": "http-telegram",
+      "name": "📲 Telegram: Уведомление ✅",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1140, 460]
+    }
+  ],
+  "connections": {
+    "⚡ Webhook: Suare Post": {
+      "main": [
+        [
+          {
+            "node": "🛠️ Форматирование постов",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🛠️ Форматирование постов": {
+      "main": [
+        [
+          { "node": "📸 Post to Instagram", "type": "main", "index": 0 },
+          { "node": "🧵 Post to Threads", "type": "main", "index": 0 },
+          { "node": "🎵 Post to TikTok", "type": "main", "index": 0 },
+          { "node": "▶️ Post to YouTube", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "📸 Post to Instagram": {
+      "main": [
+        [
+          { "node": "📲 Telegram: Уведомление ✅", "type": "main", "index": 0 }
+        ]
+      ]
+    }
+  }
+}
